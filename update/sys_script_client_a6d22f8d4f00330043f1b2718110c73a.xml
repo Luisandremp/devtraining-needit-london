@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?><record_update sys_domain="global" table="sys_script_client">
+    <sys_script_client action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <applies_extended>false</applies_extended>
+        <condition/>
+        <description/>
+        <field/>
+        <global>true</global>
+        <isolate_script>true</isolate_script>
+        <messages/>
+        <name/>
+        <order/>
+        <script><![CDATA[var targetText = "";
+
+
+function findReference(){
+	var result;
+  //regEx to find the reference
+  regReference = new RegExp(/\bRITM\d{7}\b/);
+	//separate every line of the mail
+	targetText.split("\n").forEach(function(element, index){
+  	//if he finds a refence he returns it; it returns ONLY the first valid reference
+    if(regReference.test(element)){
+    
+    	if(result == undefined)
+      result = regReference.exec(element)[0];
+      
+    }
+  });
+  return result;
+}
+
+var reference = findReference();
+console.log("reference: "+reference);
+
+
+/*
+*
+*    Parser la liste
+*
+*/
+// seprarer les ligne par les bulletes
+var reg = new RegExp(/● ([^●]*)/g);
+//separer le nom de la variable par les ( )
+var reg2 = new RegExp(/\((.*?)\)/);
+//separer le value par les [ ]
+var reg3 = new RegExp(/\[(.*?)\]/);
+
+// Array de tous les les lignes
+var result = targetText.match(reg);
+var listKeyValue= [];
+//if the mail has 1+ list items we will parce them
+if(result.length > 1){
+
+    // Boucler par tous les lignes et pour trouver tous les pair cle valeur
+  result.forEach(function(element) {
+    var key; 
+    var value;
+    // Verifier si les valuers sont pas NULL our ne pas bloquer le script; et utiliser la regEx pour trouver les bons valeurs
+    if(reg2.exec(element) !== null) key = reg2.exec(element)[1];
+    if(reg3.exec(element) !== null) value =  reg3.exec(element)[1];
+    listKeyValue[key] = value;
+  });
+
+}
+console.table(listKeyValue);]]></script>
+        <sys_class_name>sys_script_client</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2019-03-06 10:06:06</sys_created_on>
+        <sys_domain>global</sys_domain>
+        <sys_domain_path>/</sys_domain_path>
+        <sys_id>a6d22f8d4f00330043f1b2718110c73a</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name/>
+        <sys_overrides/>
+        <sys_package display_value="NeedIt" source="x_58872_needit">6ead8e780f603200cd674f8ce1050ed1</sys_package>
+        <sys_policy/>
+        <sys_scope display_value="NeedIt">6ead8e780f603200cd674f8ce1050ed1</sys_scope>
+        <sys_update_name>sys_script_client_a6d22f8d4f00330043f1b2718110c73a</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2019-03-06 10:06:06</sys_updated_on>
+        <table/>
+        <type/>
+        <ui_type>0</ui_type>
+        <view/>
+    </sys_script_client>
+</record_update>
